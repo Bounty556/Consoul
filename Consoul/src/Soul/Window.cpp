@@ -1,6 +1,5 @@
+#include "pch.h"
 #include "Window.h"
-
-#include <cstdio>
 
 namespace Soul {
 	Window::Window(int width, int height)

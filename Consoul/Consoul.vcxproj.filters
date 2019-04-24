@@ -21,9 +21,15 @@
     <ClCompile Include="src\Soul\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Soul\pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Soul\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
