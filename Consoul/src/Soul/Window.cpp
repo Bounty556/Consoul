@@ -27,18 +27,7 @@ namespace Soul {
 		delete[] m_Screen;
 	}
 
-	void Window::DrawToBuffer(wchar_t wchar, int x, int y)
-	{
-		if (x < 0 || x >= m_BufferWidth || y < 0 || y >= m_BufferHeight)
-		{
-			// Report error
-			return;
-		}
-
-		m_Screen[y * m_BufferWidth + x] = wchar;
-	}
-
-	void Window::DrawToBuffer(const wchar_t* wstring, int length, int x, int y)
+	void Window::DrawToBuffer(const wchar_t* wstring, int length, int x, int y) const
 	{
 		if (x < 0 || x >= m_BufferWidth || y < 0 || y >= m_BufferHeight ||
 			length + y * m_BufferWidth + x >= m_BufferSize)
@@ -48,10 +37,15 @@ namespace Soul {
 		}
 
 		for (int i = 0; i < length; ++i)
+		{
+			if (x < 0 || x >= m_BufferWidth || y < 0 || y >= m_BufferHeight ||
+				length + y * m_BufferWidth + x >= m_BufferSize)
+				continue;
 			m_Screen[i + y * m_BufferWidth + x] = wstring[i];
+		}
 	}
 
-	void Window::ClearFrame()
+	void Window::ClearFrame() const
 	{
 		for (int i = 0; i < m_BufferSize; i++)
 			m_Screen[i] = ' ';
@@ -61,10 +55,6 @@ namespace Soul {
 	{
 		m_Screen[m_BufferWidth * m_BufferHeight - 1] = '\0';
 		WriteConsoleOutputCharacterW(m_Console, m_Screen, m_BufferSize, { 0, 0 }, &m_Bytes);
-	}
-
-	void Window::Update(float deltaTime)
-	{
 	}
 
 	Window* Window::Create()

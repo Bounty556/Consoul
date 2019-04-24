@@ -15,10 +15,19 @@ namespace Soul {
 	{
 		while (m_Running)
 		{
-			m_Window->Update(0.001f);
+			m_LayerStack.Update(0.001f);
 			m_Window->ClearFrame();
-			m_Window->DrawToBuffer(L"HELLLOOOOOO", 11, 20, 40);
+			m_LayerStack.Draw(m_Window.get());
 			m_Window->DrawFrame();
 		}
+	}
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+	}
+
+	void Application::PushOverlay(Layer* overlay)
+	{
+		m_LayerStack.PushOverlay(overlay);
 	}
 }

@@ -7,12 +7,10 @@ namespace Soul {
 		Window(int width, int height);
 		~Window();
 
-		void DrawToBuffer(wchar_t glyph, int x, int y);
-		void DrawToBuffer(const wchar_t* glyph, int length, int x, int y);
+		void DrawToBuffer(const wchar_t* glyph, int length, int x, int y) const;
 
-		void ClearFrame();
+		void ClearFrame() const;
 		void DrawFrame();
-		void Update(float deltaTime);
 
 		inline int GetWidth() const { return m_BufferWidth; }
 		inline int GetHeight() const { return m_BufferHeight; }
@@ -23,7 +21,7 @@ namespace Soul {
 		int m_BufferWidth;
 		int m_BufferHeight;
 		int m_BufferSize;
-		wchar_t* m_Screen;
+		mutable wchar_t* m_Screen;
 		HANDLE m_Console;
 		DWORD m_Bytes;
 	};

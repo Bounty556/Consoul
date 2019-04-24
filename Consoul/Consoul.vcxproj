@@ -85,6 +85,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Soul\Layer.cpp" />
+    <ClCompile Include="src\Soul\LayerStack.cpp" />
     <ClCompile Include="src\Soul\Application.cpp" />
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\Soul\pch.cpp">
@@ -94,6 +96,8 @@
     <ClCompile Include="src\Soul\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Soul\Layer.h" />
+    <ClInclude Include="src\Soul\LayerStack.h" />
     <ClInclude Include="src\Soul\Application.h" />
     <ClInclude Include="src\Soul\EntryPoint.h" />
     <ClInclude Include="src\Soul\pch.h" />

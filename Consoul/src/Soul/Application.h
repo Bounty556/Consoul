@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LayerStack.h"
 #include "Window.h"
 
 namespace Soul {
@@ -10,7 +11,11 @@ namespace Soul {
 		virtual ~Application();
 
 		void Run();
+
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
 	private:
+		LayerStack m_LayerStack;
 		std::unique_ptr<Window> m_Window;
 		bool m_Running = true;
 	};
