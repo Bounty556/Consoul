@@ -14,7 +14,7 @@ namespace Soul {
 		delete[] m_Draw;
 	}
 
-	const wchar_t* Layer::Draw()
+	const wchar_t* Layer::Draw() const
 	{
 		return m_Draw;
 	}

@@ -49,6 +49,9 @@ namespace Soul {
 	void LayerStack::Draw(const Window* target)
 	{
 		for (auto it = m_Layers.begin(); it != m_Layers.end(); ++it)
-			target->DrawToBuffer((*it)->Draw(), (*it)->GetLength(), (*it)->GetXPos(), (*it)->GetYPos());
+		{
+			if ((*it)->IsDrawn)
+				target->DrawToBuffer((*it)->Draw(), (*it)->GetLength(), (*it)->GetXPos(), (*it)->GetYPos());
+		}
 	}
 }

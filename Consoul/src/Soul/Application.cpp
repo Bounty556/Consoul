@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Application.h"
+#include "InputManager.h"
 
 namespace Soul {
 	Application::Application()
@@ -16,6 +17,7 @@ namespace Soul {
 		while (m_Running)
 		{
 			m_LayerStack.Update(0.001f);
+			InputManager::UpdateStates();
 			m_Window->ClearFrame();
 			m_LayerStack.Draw(m_Window.get());
 			m_Window->DrawFrame();

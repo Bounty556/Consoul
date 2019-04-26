@@ -85,6 +85,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Soul\ConsoleLayer.cpp" />
+    <ClCompile Include="src\Soul\InputManager.cpp" />
     <ClCompile Include="src\Soul\Layer.cpp" />
     <ClCompile Include="src\Soul\LayerStack.cpp" />
     <ClCompile Include="src\Soul\Application.cpp" />
@@ -97,6 +99,8 @@
     <ClCompile Include="src\Soul\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Soul\ConsoleLayer.h" />
+    <ClInclude Include="src\Soul\InputManager.h" />
     <ClInclude Include="src\Soul\Log.h" />
     <ClInclude Include="src\Soul\Layer.h" />
     <ClInclude Include="src\Soul\LayerStack.h" />
