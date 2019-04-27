@@ -11,11 +11,11 @@ namespace Soul {
 		virtual void Update(float deltaTime) { };
 		virtual const wchar_t* Draw() const;
 
-		inline int GetXPos() const { return m_XPos; }
-		inline int GetYPos() const { return m_YPos; }
-		inline int GetLength() const { return m_BufferSize; }
+		inline const int GetXPos() const { return m_XPos; }
+		inline const int GetYPos() const { return m_YPos; }
+		inline const int GetLength() const { return m_BufferSize; }
 	protected:
-		void DrawToBuffer(const wchar_t* wstring, int length, int x, int y);
+		void DrawToBuffer(const wchar_t* wstring, int x, int y) const;
 		void ClearBuffer();
 	public:
 		bool IsDrawn = true;

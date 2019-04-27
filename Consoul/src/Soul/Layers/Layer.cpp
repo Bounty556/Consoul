@@ -19,20 +19,16 @@ namespace Soul {
 		return m_Draw;
 	}
 
-	void Layer::DrawToBuffer(const wchar_t* wstring, int length, int x, int y)
+	void Layer::DrawToBuffer(const wchar_t* wstring, int x, int y) const
 	{
-		/// TODO: ERROR HANDLING
+		int length = wcslen(wstring);
 		for (int i = 0; i < length; i++)
-		{
 			m_Draw[y * m_BufferWidth + x + i] = wstring[i];
-		}
 	}
 
 	void Layer::ClearBuffer()
 	{
 		for (int i = 0; i < m_BufferSize; i++)
-		{
 			m_Draw[i] = ' ';
-		}
 	}
 }

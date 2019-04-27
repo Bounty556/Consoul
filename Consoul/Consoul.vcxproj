@@ -58,8 +58,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/Soul</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -75,8 +74,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/Soul</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -85,10 +83,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Soul\ConsoleLayer.cpp" />
+    <ClCompile Include="src\Soul\Layers\ConsoleLayer.cpp" />
     <ClCompile Include="src\Soul\InputManager.cpp" />
-    <ClCompile Include="src\Soul\Layer.cpp" />
-    <ClCompile Include="src\Soul\LayerStack.cpp" />
+    <ClCompile Include="src\Soul\Layers\Layer.cpp" />
+    <ClCompile Include="src\Soul\Layers\LayerStack.cpp" />
     <ClCompile Include="src\Soul\Application.cpp" />
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\Soul\Log.cpp" />
@@ -96,19 +94,24 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Soul\UI\UIButton.cpp" />
     <ClCompile Include="src\Soul\Window.cpp" />
+    <ClCompile Include="src\Soul\UI\UISet.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Soul\ConsoleLayer.h" />
+    <ClInclude Include="src\Soul\Layers\ConsoleLayer.h" />
     <ClInclude Include="src\Soul\InputManager.h" />
     <ClInclude Include="src\Soul\Log.h" />
-    <ClInclude Include="src\Soul\Layer.h" />
-    <ClInclude Include="src\Soul\LayerStack.h" />
+    <ClInclude Include="src\Soul\Layers\Layer.h" />
+    <ClInclude Include="src\Soul\Layers\LayerStack.h" />
     <ClInclude Include="src\Soul\Application.h" />
     <ClInclude Include="src\Soul\EntryPoint.h" />
     <ClInclude Include="src\Soul\pch.h" />
     <ClInclude Include="src\Soul\Soul.h" />
+    <ClInclude Include="src\Soul\UI\UIButton.h" />
+    <ClInclude Include="src\Soul\UI\UIElement.h" />
     <ClInclude Include="src\Soul\Window.h" />
+    <ClInclude Include="src\Soul\UI\UISet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

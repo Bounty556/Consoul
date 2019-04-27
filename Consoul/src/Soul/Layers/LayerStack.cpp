@@ -9,23 +9,26 @@ namespace Soul {
 
 	LayerStack::~LayerStack()
 	{
-		for (int i = 0; i < m_Layers.size(); ++i)
-			delete m_Layers[i];
+		for (Layer* layer : m_Layers)
+			delete layer;
 
 		m_Layers.clear();
 	}
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		m_Layers.emplace(m_LayerPlacement, layer);
+		m_LayerPlacement = m_Layers.emplace(m_LayerPlacement, layer);
 	}
 
 	void LayerStack::PopLayer(Layer* layer)
 	{
 		auto found = std::find(m_Layers.begin(), m_Layers.end(), layer);
 
-		m_Layers.erase(found);
-		--m_LayerPlacement;
+		if (found != m_Layers.end())
+		{
+			m_Layers.erase(found);
+			--m_LayerPlacement;
+		}
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay)
@@ -37,7 +40,8 @@ namespace Soul {
 	{
 		auto found = std::find(m_Layers.begin(), m_Layers.end(), overlay);
 
-		m_Layers.erase(found);
+		if (found != m_Layers.end())
+			m_Layers.erase(found);
 	}
 
 	void LayerStack::Update(float deltaTime)

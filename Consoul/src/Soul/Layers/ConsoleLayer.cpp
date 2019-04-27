@@ -6,10 +6,11 @@
 
 namespace Soul {
 	ConsoleLayer::ConsoleLayer(int width, int height)
-		: Layer(width, height, 0, 0)
+		: Layer(width, height)
 	{
 		Soul::InputManager::AddKey(Soul::Tilde);
 
+		// Draw the bounding box for the console
 		for (int x = 0; x < m_BufferWidth; x++)
 		{
 			for (int y = 0; y < m_BufferHeight; y++)
