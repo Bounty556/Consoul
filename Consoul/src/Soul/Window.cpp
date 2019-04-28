@@ -12,13 +12,9 @@ namespace Soul {
 
 		// Error handling
 		if (m_Console == INVALID_HANDLE_VALUE)
-		{
 			swprintf_s(m_Screen, 160, L"ERROR [%d]: Could not create window", GetLastError());
-		}
 		else
-		{
 			SetConsoleActiveScreenBuffer(m_Console);
-		}
 	}
 
 	Window::~Window()
@@ -29,18 +25,12 @@ namespace Soul {
 
 	void Window::DrawToBuffer(const wchar_t* wstring, int length, int x, int y) const
 	{
-		if (x < 0 || x >= m_BufferWidth || y < 0 || y >= m_BufferHeight ||
-			length + y * m_BufferWidth + x >= m_BufferSize)
-		{
-			// Report error
-			return;
-		}
-
 		for (int i = 0; i < length; ++i)
 		{
-			if (x < 0 || x >= m_BufferWidth || y < 0 || y >= m_BufferHeight ||
-				length + y * m_BufferWidth + x >= m_BufferSize)
+			if (i + y * m_BufferWidth + x >= m_BufferSize)
 				continue;
+
+
 			m_Screen[i + y * m_BufferWidth + x] = wstring[i];
 		}
 	}

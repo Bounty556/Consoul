@@ -1,16 +1,13 @@
 #include "pch.h"
 #include "Soul/Soul.h"
 
-///TODO: MAKE FRAMETIMES ACTUALLY WORK
-///TODO: FIX RENDERING WRAPPING AROUND SCREEN
-///TODO: MAKE LAYERSTACK WORK IN QUEUES
 ///TODO: MAKE GAME LAYER
 
 class ExampleUILayer : public Soul::Layer
 {
 public:
 	ExampleUILayer()
-		: Layer(160, 40),
+		: Layer(160, 45),
 		m_UI(new Soul::UISet())
 	{
 		Soul::UIButton* testTop = new Soul::UIButton(L"This is test Top", 30, 10,
@@ -39,9 +36,10 @@ public:
 			m_Draw[i] = ' ';
 	}
 
-	void Update(float deltaTime) override
+	bool Update(float deltaTime) override
 	{
 		m_UI->Update(deltaTime);
+		return true;
 	}
 
 	const wchar_t* Draw() const override
@@ -63,8 +61,8 @@ class Client : public Soul::Application
 public:
 	Client()
 	{
-		PushOverlay(new Soul::ConsoleLayer(160, 6));
 		PushLayer(new ExampleUILayer());
+		PushOverlay(new Soul::ConsoleLayer(160, 6));
 	}
 
 	~Client()

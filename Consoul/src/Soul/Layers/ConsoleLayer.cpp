@@ -25,7 +25,7 @@ namespace Soul {
 		}
 	}
 
-	void ConsoleLayer::Update(float deltaTime)
+	bool ConsoleLayer::Update(float deltaTime)
 	{
 		if (Soul::InputManager::WasKeyPressed(Soul::Tilde))
 			IsDrawn = !IsDrawn;
@@ -48,5 +48,7 @@ namespace Soul {
 			}
 			Soul::Log::PopLastLogLine();
 		}
+
+		return true;
 	}
 }
