@@ -38,7 +38,7 @@ namespace Soul {
 					m_Draw[i * m_BufferWidth + j] = m_Draw[(i + 1) * m_BufferWidth + j];
 
 			// Write last written log line into console and write the rest of the space as blank
-			std::wstring& logLine = Soul::Log::GetLastLogLine();
+			const std::string& logLine = Soul::Log::GetLastLogLine();
 			for (int i = 1; i < m_BufferWidth - 1; ++i)
 			{
 				if (i - 1 < logLine.length())

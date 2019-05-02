@@ -37,7 +37,7 @@ namespace Soul {
 		
 		virtual void Select() = 0;
 
-		inline const wchar_t* Draw() const { return m_Draw; };
+		inline const char* Draw() const { return m_Draw; };
 		inline const int GetXPos() const { return m_XPos; }
 		inline const int GetYPos() const { return m_YPos; }
 	protected:
@@ -45,7 +45,7 @@ namespace Soul {
 	protected:
 		int m_XPos;
 		int m_YPos;
-		wchar_t* m_Draw;
+		char* m_Draw;
 		bool IsSelected = false;
 		std::map<Keys, UIElement*> m_Connected;
 	};

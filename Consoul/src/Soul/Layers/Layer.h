@@ -9,13 +9,13 @@ namespace Soul {
 		virtual ~Layer();
 
 		virtual bool Update(float deltaTime) { return true; };
-		virtual const wchar_t* Draw() const;
+		virtual const char* Draw() const;
 
 		inline const int GetXPos() const { return m_XPos; }
 		inline const int GetYPos() const { return m_YPos; }
 		inline const int GetLength() const { return m_BufferSize; }
 	protected:
-		void DrawToBuffer(const wchar_t* wstring, int x, int y) const;
+		void DrawToBuffer(const char* string, int x, int y) const;
 		void ClearBuffer();
 	public:
 		bool IsDrawn = true;
@@ -25,6 +25,6 @@ namespace Soul {
 		int m_BufferSize;
 		int m_XPos;
 		int m_YPos;
-		wchar_t* m_Draw;
+		char* m_Draw;
 	};
 }

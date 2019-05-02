@@ -5,5 +5,6 @@
 #include <memory>
 #include <queue>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <Windows.h>

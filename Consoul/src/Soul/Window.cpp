@@ -4,7 +4,7 @@
 namespace Soul {
 	Window::Window(int width, int height)
 		: m_BufferWidth(width), m_BufferHeight(height), m_BufferSize(width * height),
-		m_Screen(new wchar_t[m_BufferSize]),
+		m_Screen(new char[m_BufferSize]),
 		m_Bytes(0)
 	{
 		m_Console = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL,
@@ -12,7 +12,7 @@ namespace Soul {
 
 		// Error handling
 		if (m_Console == INVALID_HANDLE_VALUE)
-			swprintf_s(m_Screen, 160, L"ERROR [%d]: Could not create window", GetLastError());
+			sprintf_s(m_Screen, 160, "ERROR [%d]: Could not create window", GetLastError());
 		else
 			SetConsoleActiveScreenBuffer(m_Console);
 	}
@@ -23,7 +23,7 @@ namespace Soul {
 		delete[] m_Screen;
 	}
 
-	void Window::DrawToBuffer(const wchar_t* wstring, int length, int x, int y) const
+	void Window::DrawToBuffer(const char* string, int length, int x, int y) const
 	{
 		for (int i = 0; i < length; ++i)
 		{
@@ -31,7 +31,7 @@ namespace Soul {
 				continue;
 
 
-			m_Screen[i + y * m_BufferWidth + x] = wstring[i];
+			m_Screen[i + y * m_BufferWidth + x] = string[i];
 		}
 	}
 
@@ -44,7 +44,7 @@ namespace Soul {
 	void Window::DrawFrame()
 	{
 		m_Screen[m_BufferWidth * m_BufferHeight - 1] = '\0';
-		WriteConsoleOutputCharacterW(m_Console, m_Screen, m_BufferSize, { 0, 0 }, &m_Bytes);
+		WriteConsoleOutputCharacter(m_Console, m_Screen, m_BufferSize, { 0, 0 }, &m_Bytes);
 	}
 
 	Window* Window::Create()

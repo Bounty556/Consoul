@@ -7,7 +7,7 @@ namespace Soul {
 		Window(int width, int height);
 		~Window();
 
-		void DrawToBuffer(const wchar_t* glyph, int length, int x, int y) const;
+		void DrawToBuffer(const char* glyph, int length, int x, int y) const;
 
 		void ClearFrame() const;
 		void DrawFrame();
@@ -21,7 +21,7 @@ namespace Soul {
 		int m_BufferWidth;
 		int m_BufferHeight;
 		int m_BufferSize;
-		mutable wchar_t* m_Screen;
+		mutable char* m_Screen;
 		HANDLE m_Console;
 		DWORD m_Bytes;
 	};

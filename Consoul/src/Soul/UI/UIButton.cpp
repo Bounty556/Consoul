@@ -2,14 +2,14 @@
 #include "UIButton.h"
 
 namespace Soul {
-	UIButton::UIButton(const wchar_t* text, int xPos, int yPos, std::function<void()> callback)
+	UIButton::UIButton(const char* text, int xPos, int yPos, std::function<void()> callback)
 		: UIElement(xPos, yPos),
 		m_Callback(callback)
 	{
 		InputManager::AddKey(Enter);
 
-		char length = (char)wcslen(text);
-		m_Draw = new wchar_t[length + 2];
+		char length = (char)strlen(text);
+		m_Draw = new char[length + 2];
 		m_Draw[0] = ' ';
 		m_Draw[length + 1] = '\0';
 		for (int i = 0; i < length; ++i)

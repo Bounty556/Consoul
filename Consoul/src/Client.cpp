@@ -10,14 +10,14 @@ public:
 		: Layer(160, 45),
 		m_UI(new Soul::UISet())
 	{
-		Soul::UIButton* testTop = new Soul::UIButton(L"This is test Top", 30, 10,
-			[]() { Soul::Log::LogInfo(L"Top Button Pressed!"); });
+		Soul::UIButton* testTop = new Soul::UIButton("This is test Top", 30, 10,
+			[]() { Soul::Log::LogInfo("Top Button Pressed!"); });
 
-		Soul::UIButton* testMiddle = new Soul::UIButton(L"This is test Middle", 30, 12,
-			[]() { Soul::Log::LogInfo(L"Middle Button Pressed!"); });
+		Soul::UIButton* testMiddle = new Soul::UIButton("This is test Middle", 30, 12,
+			[]() { Soul::Log::LogInfo("Middle Button Pressed!"); });
 
-		Soul::UIButton* testBottom = new Soul::UIButton(L"This is test Bottom", 30, 14,
-			[]() { Soul::Log::LogInfo(L"Bottom Button Pressed!"); });
+		Soul::UIButton* testBottom = new Soul::UIButton("This is test Bottom", 30, 14,
+			[]() { Soul::Log::LogInfo("Bottom Button Pressed!"); });
 
 		testTop->AddConnection(testBottom, Soul::Up);
 		testTop->AddConnection(testMiddle, Soul::Down);
@@ -42,7 +42,7 @@ public:
 		return true;
 	}
 
-	const wchar_t* Draw() const override
+	const char* Draw() const override
 	{
 		const std::vector<Soul::UIElement*>& set = m_UI->Draw();
 
@@ -63,6 +63,8 @@ public:
 	{
 		PushLayer(new ExampleUILayer());
 		PushOverlay(new Soul::ConsoleLayer(160, 6));
+
+		Soul::ChartFile file("hola");
 	}
 
 	~Client()

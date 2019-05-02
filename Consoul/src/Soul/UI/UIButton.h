@@ -6,7 +6,7 @@ namespace Soul {
 	class UIButton : public UIElement
 	{
 	public:
-		explicit UIButton(const wchar_t* text, int xPos, int yPos, std::function<void()> callback);
+		explicit UIButton(const char* text, int xPos, int yPos, std::function<void()> callback);
 
 		virtual void Update(float deltaTime) override;
 	protected:
