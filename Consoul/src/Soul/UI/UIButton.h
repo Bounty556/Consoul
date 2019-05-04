@@ -8,7 +8,7 @@ namespace Soul {
 	public:
 		explicit UIButton(const char* text, int xPos, int yPos, std::function<void()> callback);
 
-		virtual void Update(float deltaTime) override;
+		virtual void Update(double deltaTime) override;
 	protected:
 		virtual void Select() override;
 		virtual void Unselect() override;

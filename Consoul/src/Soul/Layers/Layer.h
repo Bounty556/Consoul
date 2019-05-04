@@ -8,7 +8,7 @@ namespace Soul {
 		Layer(int width, int height, int xPos = 0, int yPos = 0);
 		virtual ~Layer();
 
-		virtual bool Update(float deltaTime) { return true; };
+		virtual bool Update(double deltaTime) { return true; };
 		virtual const char* Draw() const;
 
 		inline const int GetXPos() const { return m_XPos; }

@@ -20,7 +20,7 @@ namespace Soul {
 
 		void QueueAction(Action action, Layer* layer);
 
-		void Update(float deltaTime);
+		void Update(double deltaTime);
 		void Draw(const Window* target);
 	private:
 		void PushLayer(Layer* layer);

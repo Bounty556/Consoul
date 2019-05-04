@@ -49,7 +49,7 @@ namespace Soul {
 			m_Overlays.erase(found);
 	}
 
-	void LayerStack::Update(float deltaTime)
+	void LayerStack::Update(double deltaTime)
 	{
 		for (auto it = m_Queue.rbegin(); it != m_Queue.rend(); ++it)
 		{

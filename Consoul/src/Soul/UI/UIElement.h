@@ -33,7 +33,7 @@ namespace Soul {
 		}
 
 		// Returns true if other UI Elements should update
-		virtual void Update(float deltaTime) { };
+		virtual void Update(double deltaTime) { };
 		
 		virtual void Select() = 0;
 

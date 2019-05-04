@@ -33,7 +33,7 @@ namespace Soul {
 			m_Elements.erase(found);
 	}
 
-	void UISet::Update(float deltaTime)
+	void UISet::Update(double deltaTime)
 	{
 		bool checkInput = true;
 		for (auto it = m_Elements.begin(); it != m_Elements.end(); ++it)

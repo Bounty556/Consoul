@@ -41,15 +41,17 @@ public:
 		}
 	}
 
-	void Update(int bottomTimeStamp, int topTimeStamp)
+	void Update(int bottomTimeStamp, int topTimeStamp, int hitLineHeight)
 	{
 		// Interpolate position between start and end x's and y's
-		float percentDone = (float)(topTimeStamp - note.TimeStamp) / (float)(topTimeStamp - bottomTimeStamp);
+		float percentDone = ((float)(topTimeStamp - note.TimeStamp) / (float)(topTimeStamp - bottomTimeStamp))
+			- ((float)hitLineHeight / 33.0f);
 
 		m_XPos = percentDone * (float)(m_FinalXPos - m_StartXPos) + m_StartXPos;
 		m_YPos = percentDone * (float)(m_FinalYPos - m_StartYPos) + m_StartYPos;
 	}
 
+	inline const Soul::ChartFile::NoteData GetData() const { return note; }
 	inline const int GetXPos() const { return (int)m_XPos; }
 	inline const int GetYPos() const { return (int)m_YPos; }
 private:
@@ -64,15 +66,22 @@ public:
 		: Layer(160, 45),
 		m_Highway(new char[160 * 45]),
 		m_BottomTimeStamp(0), m_TopTimeStamp(0),
+		m_HitLineHeight(6),
 		m_HighwayCompression(1.25f),
 		m_TimeSinceStart(0),
-		m_CurrentDistance(0),
-		m_PreviousDistance(0),
+		m_CurrentDistance(0.0),
+		m_PreviousDistance(0.0),
 		m_BPM(120.0f),
 		m_Chart(chart)
 	{
+		Soul::InputManager::AddKey(Soul::A);
+		Soul::InputManager::AddKey(Soul::S);
+		Soul::InputManager::AddKey(Soul::D);
+		Soul::InputManager::AddKey(Soul::F);
+		Soul::InputManager::AddKey(Soul::Space);
+
 		LoadHighway();
-		Soul::AudioEngine::Play("Songs/Song.ogg");
+		Soul::AudioEngine::Play("Songs/Soulless5/song.ogg");
 	}
 
 	~GameLayer()
@@ -81,15 +90,17 @@ public:
 		delete m_Chart;
 	}
 
-	bool Update(float deltaTime) override
+	bool Update(double deltaTime) override
 	{
+		CheckNoteHits();
+
 		m_TimeSinceStart += deltaTime;
 
 		float bps = m_BPM / 60.0f;
 
-		m_CurrentDistance = (int)(m_TimeSinceStart * ((float)m_Chart->GetResolution() * bps));
-		m_BottomTimeStamp = m_CurrentDistance + m_PreviousDistance;
-		m_TopTimeStamp = (int)((m_TimeSinceStart + m_HighwayCompression) * (m_Chart->GetResolution() * bps)) + m_PreviousDistance;
+		m_CurrentDistance = m_TimeSinceStart * ((double)m_Chart->GetResolution() * bps);
+		m_BottomTimeStamp = (int)(m_CurrentDistance + m_PreviousDistance);
+		m_TopTimeStamp = (int)((m_TimeSinceStart + m_HighwayCompression) * ((float)m_Chart->GetResolution() * bps) + m_PreviousDistance);
 
 		while (m_Chart->HasNextNote() && m_Chart->PeekNextNote().TimeStamp <= m_TopTimeStamp)
 			m_Notes.push_front(Note(m_Chart->GetNextNote()));
@@ -106,7 +117,7 @@ public:
 		}
 
 		for (auto it = m_Notes.begin(); it != m_Notes.end(); ++it)
-			it->Update(m_BottomTimeStamp, m_TopTimeStamp);
+			it->Update(m_BottomTimeStamp, m_TopTimeStamp, m_HitLineHeight);
 
 		while (!m_Notes.empty() && m_Notes.back().GetYPos() > 44)
 			m_Notes.pop_back();
@@ -121,7 +132,9 @@ public:
 
 		for (auto it = m_Notes.begin(); it != m_Notes.end(); ++it)
 		{
-			m_Draw[(*it).GetYPos() * 160 + (*it).GetXPos()] = '#';
+			Note note = *it;
+			if (note.GetYPos() >= 11 && note.GetYPos() <= 44)
+				m_Draw[note.GetYPos() * 160 + note.GetXPos()] = '#';
 		}
 
 		return m_Draw;
@@ -157,13 +170,88 @@ private:
 		}
 	}
 
+	void CheckNoteHits()
+	{
+		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::A))
+		{
+			for (auto it = m_Notes.end(); it != m_Notes.begin();)
+			{
+				it--;
+
+				if (it->GetData().Color == Soul::ChartFile::Green &&
+					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
+				{
+					m_Notes.erase(it);
+					break;
+				}
+			}
+		}
+		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::S))
+		{
+			for (auto it = m_Notes.end(); it != m_Notes.begin();)
+			{
+				it--;
+
+				if (it->GetData().Color == Soul::ChartFile::Red &&
+					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
+				{
+					m_Notes.erase(it);
+					break;
+				}
+			}
+		}
+		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::D))
+		{
+			for (auto it = m_Notes.end(); it != m_Notes.begin();)
+			{
+				it--;
+
+				if (it->GetData().Color == Soul::ChartFile::Yellow &&
+					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
+				{
+					m_Notes.erase(it);
+					break;
+				}
+			}
+		}
+		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::F))
+		{
+			for (auto it = m_Notes.end(); it != m_Notes.begin();)
+			{
+				it--;
+
+				if (it->GetData().Color == Soul::ChartFile::Blue &&
+					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
+				{
+					m_Notes.erase(it);
+					break;
+				}
+			}
+		}
+		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::Space))
+		{
+			for (auto it = m_Notes.end(); it != m_Notes.begin();)
+			{
+				it--;
+
+				if (it->GetData().Color == Soul::ChartFile::Orange &&
+					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
+				{
+					m_Notes.erase(it);
+					break;
+				}
+			}
+		}
+	}
+
 private:
 	char* m_Highway;
 	int m_BottomTimeStamp, m_TopTimeStamp;
+	int m_HitLineHeight;
 	float m_HighwayCompression;
-	float m_TimeSinceStart;
-	int m_CurrentDistance;
-	int m_PreviousDistance;
+	double m_TimeSinceStart;
+	double m_CurrentDistance;
+	double m_PreviousDistance;
 	float m_BPM;
 	std::deque<Note> m_Notes;
 	Soul::ChartFile* m_Chart;

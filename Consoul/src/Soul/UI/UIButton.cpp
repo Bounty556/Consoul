@@ -16,7 +16,7 @@ namespace Soul {
 			m_Draw[i + 1] = text[i];
 	}
 
-	void UIButton::Update(float deltaTime)
+	void UIButton::Update(double deltaTime)
 	{
 		if (IsSelected && InputManager::WasKeyPressed(Enter))
 			m_Callback();

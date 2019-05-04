@@ -3,7 +3,6 @@
 #include "GameLayer.h"
 
 ///TODO: MAKE GAME LAYER
-///TODO:	ADD NOTE HITTING
 ///TODO:	ADD SCORE
 ///TODO:	ADD SCORE MULTIPLIER
 ///TODO:	ADD SUSTAIN NOTES
@@ -44,7 +43,7 @@ public:
 			m_Draw[i] = ' ';
 	}
 
-	bool Update(float deltaTime) override
+	bool Update(double deltaTime) override
 	{
 		m_UI->Update(deltaTime);
 		return true;
@@ -69,7 +68,7 @@ class Client : public Soul::Application
 public:
 	Client()
 	{
-		PushLayer(new GameLayer(new Soul::ChartFile("Songs/TShadows")));
+		PushLayer(new GameLayer(new Soul::ChartFile("Songs/Soulless5/notes")));
 		PushOverlay(new Soul::ConsoleLayer(160, 6));
 	}
 

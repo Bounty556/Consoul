@@ -8,6 +8,6 @@ namespace Soul {
 	public:
 		ConsoleLayer(int width, int height);
 
-		bool Update(float deltaTime) override;
+		bool Update(double deltaTime) override;
 	};
 }

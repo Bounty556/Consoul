@@ -13,7 +13,7 @@ namespace Soul {
 		void AddUIElement(UIElement* element);
 		void RemoveUIElement(UIElement* element);
 
-		void Update(float deltaTime);
+		void Update(double deltaTime);
 
 		const std::vector<UIElement*>& Draw() const;
 	private:

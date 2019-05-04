@@ -17,8 +17,8 @@ namespace Soul {
 	{
 		std::chrono::steady_clock::time_point previousFrame = std::chrono::high_resolution_clock::now();
 		std::chrono::steady_clock::time_point currentFrame;
-		std::chrono::duration<float> elapsedTime;
-		float deltaTime;
+		std::chrono::duration<double> elapsedTime;
+		double deltaTime;
 
 		while (m_Running)
 		{

@@ -25,7 +25,7 @@ namespace Soul {
 		}
 	}
 
-	bool ConsoleLayer::Update(float deltaTime)
+	bool ConsoleLayer::Update(double deltaTime)
 	{
 		if (Soul::InputManager::WasKeyPressed(Soul::Tilde))
 			IsDrawn = !IsDrawn;
