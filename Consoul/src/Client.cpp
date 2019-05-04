@@ -3,12 +3,12 @@
 #include "GameLayer.h"
 
 ///TODO: MAKE GAME LAYER
-///TODO:	ADD SCORE
-///TODO:	ADD SCORE MULTIPLIER
 ///TODO:	ADD SUSTAIN NOTES
-///TODO: ADD SONG FOLDER
 ///TODO: ADD MAIN MENU
 ///TODO: ADD SONG PICKER MENU
+///TODO: ADD GAME OVER STATE (SONG IS DONE)
+///TODO: SAVE SCORES
+///TODO: RATE SCORES
 
 class ExampleUILayer : public Soul::Layer
 {
@@ -68,7 +68,7 @@ class Client : public Soul::Application
 public:
 	Client()
 	{
-		PushLayer(new GameLayer(new Soul::ChartFile("Songs/Soulless5/notes")));
+		PushLayer(new GameLayer(new Soul::ChartFile("Songs/Trading Shadows/notes")));
 		PushOverlay(new Soul::ConsoleLayer(160, 6));
 	}
 

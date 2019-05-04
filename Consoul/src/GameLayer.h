@@ -67,11 +67,14 @@ public:
 		m_Highway(new char[160 * 45]),
 		m_BottomTimeStamp(0), m_TopTimeStamp(0),
 		m_HitLineHeight(6),
+		m_Score(0),
+		m_ComboCount(0),
+		m_Multiplier(1),
 		m_HighwayCompression(1.25f),
+		m_BPM(120.0f),
 		m_TimeSinceStart(0),
 		m_CurrentDistance(0.0),
 		m_PreviousDistance(0.0),
-		m_BPM(120.0f),
 		m_Chart(chart)
 	{
 		Soul::InputManager::AddKey(Soul::A);
@@ -81,7 +84,7 @@ public:
 		Soul::InputManager::AddKey(Soul::Space);
 
 		LoadHighway();
-		Soul::AudioEngine::Play("Songs/Soulless5/song.ogg");
+		Soul::AudioEngine::Play("Songs/Trading Shadows/song.ogg");
 	}
 
 	~GameLayer()
@@ -120,22 +123,40 @@ public:
 			it->Update(m_BottomTimeStamp, m_TopTimeStamp, m_HitLineHeight);
 
 		while (!m_Notes.empty() && m_Notes.back().GetYPos() > 44)
+		{
 			m_Notes.pop_back();
+			NoteMissed();
+		}
 
 		return true;
 	}
 
 	const char* Draw() const override
 	{
+		// Draw Highway template
 		for (int i = 0; i < 160 * 45 - 1; ++i)
 			m_Draw[i] = m_Highway[i];
 
+		// Draw Notes
 		for (auto it = m_Notes.begin(); it != m_Notes.end(); ++it)
 		{
 			Note note = *it;
 			if (note.GetYPos() >= 11 && note.GetYPos() <= 44)
 				m_Draw[note.GetYPos() * 160 + note.GetXPos()] = '#';
 		}
+
+		//Draw Combo Bar
+		for (int i = 0; i < m_ComboCount; i++)
+		{
+			m_Draw[15 * 160 + 119 + i] = '#';
+			m_Draw[16 * 160 + 119 + i] = '#';
+		}
+
+		// Draw Multiplier
+		m_Draw[16 * 160 + 136] = std::to_string(m_Multiplier).c_str()[0];
+
+		// Draw Score
+		DrawToBuffer(std::to_string(m_Score).c_str(), 120, 12);
 
 		return m_Draw;
 	}
@@ -174,20 +195,29 @@ private:
 	{
 		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::A))
 		{
+			bool hit = false;
 			for (auto it = m_Notes.end(); it != m_Notes.begin();)
 			{
 				it--;
 
+				// Note hit
 				if (it->GetData().Color == Soul::ChartFile::Green &&
 					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
 				{
 					m_Notes.erase(it);
+					hit = true;
 					break;
 				}
 			}
+
+			if (hit)
+				NoteHit();
+			else
+				NoteMissed();
 		}
 		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::S))
 		{
+			bool hit = false;
 			for (auto it = m_Notes.end(); it != m_Notes.begin();)
 			{
 				it--;
@@ -196,12 +226,19 @@ private:
 					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
 				{
 					m_Notes.erase(it);
+					hit = true;
 					break;
 				}
 			}
+
+			if (hit)
+				NoteHit();
+			else
+				NoteMissed();
 		}
 		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::D))
 		{
+			bool hit = false;
 			for (auto it = m_Notes.end(); it != m_Notes.begin();)
 			{
 				it--;
@@ -210,12 +247,19 @@ private:
 					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
 				{
 					m_Notes.erase(it);
+					hit = true;
 					break;
 				}
 			}
+
+			if (hit)
+				NoteHit();
+			else
+				NoteMissed();
 		}
 		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::F))
 		{
+			bool hit = false;
 			for (auto it = m_Notes.end(); it != m_Notes.begin();)
 			{
 				it--;
@@ -224,12 +268,19 @@ private:
 					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
 				{
 					m_Notes.erase(it);
+					hit = true;
 					break;
 				}
 			}
+
+			if (hit)
+				NoteHit();
+			else
+				NoteMissed();
 		}
 		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::Space))
 		{
+			bool hit = false;
 			for (auto it = m_Notes.end(); it != m_Notes.begin();)
 			{
 				it--;
@@ -238,21 +289,58 @@ private:
 					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
 				{
 					m_Notes.erase(it);
+					hit = true;
 					break;
 				}
 			}
+
+			if (hit)
+				NoteHit();
+			else
+				NoteMissed();
 		}
+	}
+
+	void NoteHit()
+	{
+		// Check current combo and multiplier
+		if (m_Multiplier == 4)
+		{
+			if (++m_ComboCount > 10)
+				m_ComboCount = 10;
+		}
+		else
+		{
+			// Add to combo meter and adjust multiplier
+			if (++m_ComboCount >= 10)
+			{
+				m_Multiplier++;
+				m_ComboCount = 0;
+			}
+		}
+
+		// Award points
+		m_Score += 10 * m_Multiplier;
+	}
+
+	void NoteMissed()
+	{
+		m_ComboCount = 0;
+		m_Multiplier = 1;
 	}
 
 private:
 	char* m_Highway;
 	int m_BottomTimeStamp, m_TopTimeStamp;
 	int m_HitLineHeight;
+	int m_Score;
+	short m_ComboCount;
+	short m_Multiplier;
 	float m_HighwayCompression;
+	float m_BPM;
 	double m_TimeSinceStart;
 	double m_CurrentDistance;
 	double m_PreviousDistance;
-	float m_BPM;
 	std::deque<Note> m_Notes;
 	Soul::ChartFile* m_Chart;
 };
