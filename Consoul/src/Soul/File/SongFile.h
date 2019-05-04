@@ -24,6 +24,12 @@ namespace Soul {
 			int Length;
 		};
 
+		struct EventData
+		{
+			int TimeStamp;
+			int BPM;
+		};
+
 		SongFile()
 			: m_SongName("Unknown"), m_ArtistName("Unknown"), m_CharterName("Unknown"),
 			m_ChartResolution(0) { }
@@ -38,21 +44,34 @@ namespace Soul {
 			m_Notes.pop();
 			return note;
 		}
-
 		inline const NoteData& PeekNextNote() const { return m_Notes.front(); }
 		inline const bool HasNextNote() const { return m_Notes.size() > 0; }
+
+		EventData GetNextEvent()
+		{
+			if (m_Events.size() == 0)
+			{
+				return { 0, 0 };
+			}
+			EventData event = m_Events.front();
+			m_Events.pop();
+			return event;
+		}
+		inline const EventData& PeekNextEvent() const { return m_Events.front(); }
+		inline const bool HasNextEvent() const { return m_Events.size() > 0; }
+
 		inline const std::string& GetSongName() const { return m_SongName; }
 		inline const std::string& GetArtistName() const { return m_ArtistName; }
 		inline const std::string& GetCharterName() const { return m_CharterName; }
 		inline const unsigned int GetResolution() const { return m_ChartResolution; }
 	protected:
 		virtual void LoadFile(const std::string& filePath) = 0;
-
 	protected:
 		std::string m_SongName;
 		std::string m_ArtistName;
 		std::string m_CharterName;
 		unsigned int m_ChartResolution;
 		std::queue<NoteData> m_Notes; // Timestamp, Note value pair
+		std::queue<EventData> m_Events;
 	};
 }

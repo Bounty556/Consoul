@@ -14,5 +14,6 @@ namespace Soul {
 	private:
 		void LoadMetaData(const std::string& line);
 		void LoadNoteData(const std::string& line);
+		void LoadSyncData(const std::string& line);
 	};
 }

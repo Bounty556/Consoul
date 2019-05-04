@@ -2,7 +2,6 @@
 #include "Soul/Soul.h"
 #include "GameLayer.h"
 
-///TODO: MAKE NOTES SYNCED WITH SONG
 ///TODO: MAKE GAME LAYER
 ///TODO:	ADD NOTE HITTING
 ///TODO:	ADD SCORE
@@ -70,7 +69,7 @@ class Client : public Soul::Application
 public:
 	Client()
 	{
-		PushLayer(new GameLayer(new Soul::ChartFile("TShadows")));
+		PushLayer(new GameLayer(new Soul::ChartFile("Songs/TShadows")));
 		PushOverlay(new Soul::ConsoleLayer(160, 6));
 	}
 

@@ -23,6 +23,7 @@ namespace Soul {
 			std::string line;
 
 			bool inSongSection = false;
+			bool inSyncSection = false;
 			bool inNoteSection = false;
 
 			while (!file.eof())
@@ -31,7 +32,7 @@ namespace Soul {
 
 				if (inSongSection)
 				{
-					if (line == "}")
+					if (line.find("}") != std::string::npos)
 					{
 						inSongSection = false;
 						continue;
@@ -39,6 +40,17 @@ namespace Soul {
 
 					// Get Data in file
 					LoadMetaData(line);
+				}
+				else if (inSyncSection)
+				{
+					if (line.find("}") != std::string::npos)
+					{
+						inSyncSection = false;
+						continue;
+					}
+
+					// Get Sync in file
+					LoadSyncData(line);
 				}
 				else if (inNoteSection)
 				{
@@ -49,13 +61,19 @@ namespace Soul {
 					}
 
 					// Get Note data in file
-					LoadNoteData(line.c_str());
+					LoadNoteData(line);
 				}
 				else if (line.find("[Song]") != std::string::npos)
 				{
 					// Start section
 					std::getline(file, line, '\n');
 					inSongSection = true;
+				}
+				else if (line.find("[SyncTrack]") != std::string::npos)
+				{
+					// Start section
+					std::getline(file, line, '\n');
+					inSyncSection = true;
 				}
 				else if (line.find("ExpertSingle") != std::string::npos)
 				{
@@ -149,9 +167,31 @@ namespace Soul {
 		else
 			note.Sustain = true;
 
+		// For preventing 2 notes from appearing one the same line.... Turns out that's exactly
+		// what we want
 		//if (m_Notes.size() > 0 && m_Notes.back().TimeStamp == note.TimeStamp)
 		//	m_Notes.back().Color = (NoteColor)(m_Notes.back().Color | note.Color);
 		//else
-			m_Notes.push(note);
+		m_Notes.push(note);
+	}
+
+	void ChartFile::LoadSyncData(const std::string& line)
+	{
+		std::string lineCopy = line;
+		std::stringstream stream(lineCopy);
+		EventData event;
+		
+		stream >> event.TimeStamp;
+
+		std::string type;
+		stream >> type;
+		stream >> type;
+
+		if (type.find("B") != std::string::npos)
+			stream >> event.BPM;
+		else
+			return;
+
+		m_Events.push(event);
 	}
 }

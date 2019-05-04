@@ -66,10 +66,13 @@ public:
 		m_BottomTimeStamp(0), m_TopTimeStamp(0),
 		m_HighwayCompression(1.25f),
 		m_TimeSinceStart(0),
+		m_CurrentDistance(0),
+		m_PreviousDistance(0),
+		m_BPM(120.0f),
 		m_Chart(chart)
 	{
 		LoadHighway();
-		Soul::AudioEngine::Play("Song.ogg");
+		Soul::AudioEngine::Play("Songs/Song.ogg");
 	}
 
 	~GameLayer()
@@ -82,11 +85,25 @@ public:
 	{
 		m_TimeSinceStart += deltaTime;
 
-		m_BottomTimeStamp = (int)(m_TimeSinceStart * (m_Chart->GetResolution() * 2.1f));
-		m_TopTimeStamp = (int)((m_TimeSinceStart + m_HighwayCompression) * (m_Chart->GetResolution() * 2.1f));
+		float bps = m_BPM / 60.0f;
+
+		m_CurrentDistance = (int)(m_TimeSinceStart * ((float)m_Chart->GetResolution() * bps));
+		m_BottomTimeStamp = m_CurrentDistance + m_PreviousDistance;
+		m_TopTimeStamp = (int)((m_TimeSinceStart + m_HighwayCompression) * (m_Chart->GetResolution() * bps)) + m_PreviousDistance;
 
 		while (m_Chart->HasNextNote() && m_Chart->PeekNextNote().TimeStamp <= m_TopTimeStamp)
 			m_Notes.push_front(Note(m_Chart->GetNextNote()));
+
+		while (m_Chart->HasNextEvent() && m_Chart->PeekNextEvent().TimeStamp <= m_BottomTimeStamp)
+		{
+			m_BPM = m_Chart->GetNextEvent().BPM / 1000.0f; // Change the bpm
+
+			m_PreviousDistance += m_CurrentDistance;
+			m_CurrentDistance = 0;
+			m_TimeSinceStart = 0;
+
+			Soul::Log::LogInfo("BPM changed to: " + std::to_string(m_BPM));
+		}
 
 		for (auto it = m_Notes.begin(); it != m_Notes.end(); ++it)
 			it->Update(m_BottomTimeStamp, m_TopTimeStamp);
@@ -145,6 +162,9 @@ private:
 	int m_BottomTimeStamp, m_TopTimeStamp;
 	float m_HighwayCompression;
 	float m_TimeSinceStart;
+	int m_CurrentDistance;
+	int m_PreviousDistance;
+	float m_BPM;
 	std::deque<Note> m_Notes;
 	Soul::ChartFile* m_Chart;
 };
