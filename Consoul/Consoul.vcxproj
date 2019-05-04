@@ -101,6 +101,7 @@
     <ClCompile Include="src\Soul\UI\UISet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameLayer.h" />
     <ClInclude Include="src\Soul\File\ChartFile.h" />
     <ClInclude Include="src\Soul\File\SongFile.h" />
     <ClInclude Include="src\Soul\Layers\ConsoleLayer.h" />

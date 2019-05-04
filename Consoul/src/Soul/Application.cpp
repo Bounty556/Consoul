@@ -14,8 +14,8 @@ namespace Soul {
 
 	void Application::Run()
 	{
-		std::chrono::steady_clock::time_point previousFrame;
-		std::chrono::steady_clock::time_point currentFrame = std::chrono::high_resolution_clock::now();
+		std::chrono::steady_clock::time_point previousFrame = std::chrono::high_resolution_clock::now();
+		std::chrono::steady_clock::time_point currentFrame;
 		std::chrono::duration<float> elapsedTime;
 		float deltaTime;
 
@@ -24,6 +24,7 @@ namespace Soul {
 			currentFrame = std::chrono::high_resolution_clock::now();
 			elapsedTime = currentFrame - previousFrame;
 			previousFrame = currentFrame;
+
 			deltaTime = elapsedTime.count();
 
 			m_LayerStack.Update(deltaTime);

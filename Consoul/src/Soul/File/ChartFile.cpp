@@ -102,50 +102,57 @@ namespace Soul {
 	void ChartFile::LoadNoteData(const std::string& line)
 	{
 		std::string lineCopy = line;
-		std::vector<int> data;
 		std::stringstream stream(lineCopy);
 
+		NoteData note;
+
+		// Store note's timestamp
+		stream >> note.TimeStamp;
+
+		// Store whether note is a sustain or not
 		std::string temp;
-		int found;
-		while (!stream.eof())
-		{
-			stream >> temp;
-			if (std::stringstream(temp) >> found)
-				data.push_back(found);
+		stream >> temp;
+		stream >> temp;
 
-			temp = "";
-		}
+		if (temp == "S")
+			return;
 
-		auto it = data.begin();
+		// Store note's color
+		int col;
+		stream >> col;
 
-		int timeStamp = *it;
-		Note note = (Note)*(it + 1);
-		Note noteValue = None;
-
-		switch (note)
+		switch (col)
 		{
 		case 0:
-			noteValue = Green;
+			note.Color = ChartFile::NoteColor::Green;
 			break;
 		case 1:
-			noteValue = Red;
+			note.Color = ChartFile::NoteColor::Red;
 			break;
 		case 2:
-			noteValue = Yellow;
+			note.Color = ChartFile::NoteColor::Yellow;
 			break;
 		case 3:
-			noteValue = Blue;
+			note.Color = ChartFile::NoteColor::Blue;
 			break;
 		case 4:
-			noteValue = Orange;
+			note.Color = ChartFile::NoteColor::Orange;
 			break;
 		default:
-			noteValue = None;
+			return;
 		}
 
-		if (m_Notes.size() > 0 && m_Notes.back().first == timeStamp)
-			m_Notes.back().second = (Note)(m_Notes.back().second | noteValue);
+		// Store note's sustain length
+		stream >> note.Length;
+
+		if (note.Length == 0)
+			note.Sustain = false;
 		else
-			m_Notes.push(std::pair<int, Note>(timeStamp, noteValue));
+			note.Sustain = true;
+
+		//if (m_Notes.size() > 0 && m_Notes.back().TimeStamp == note.TimeStamp)
+		//	m_Notes.back().Color = (NoteColor)(m_Notes.back().Color | note.Color);
+		//else
+			m_Notes.push(note);
 	}
 }

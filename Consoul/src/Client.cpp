@@ -1,7 +1,16 @@
 #include "pch.h"
 #include "Soul/Soul.h"
+#include "GameLayer.h"
 
+///TODO: MAKE OGG FILES PLAY
 ///TODO: MAKE GAME LAYER
+///TODO:	ADD NOTE HITTING
+///TODO:	ADD SCORE
+///TODO:	ADD SCORE MULTIPLIER
+///TODO:	ADD HELD NOTES
+///TODO: ADD SONG FOLDER
+///TODO: ADD MAIN MENU
+///TODO: ADD SONG PICKER MENU
 
 class ExampleUILayer : public Soul::Layer
 {
@@ -61,10 +70,8 @@ class Client : public Soul::Application
 public:
 	Client()
 	{
-		PushLayer(new ExampleUILayer());
+		PushLayer(new GameLayer(new Soul::ChartFile("TShadows")));
 		PushOverlay(new Soul::ConsoleLayer(160, 6));
-
-		Soul::ChartFile file("hola");
 	}
 
 	~Client()
