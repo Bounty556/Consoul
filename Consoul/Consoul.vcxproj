@@ -58,10 +58,11 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>src/Soul</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\Soul\;$(SolutionDir)Consoul\vendor\irrklang\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>irrklang.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Consoul\vendor\irrklang\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -74,15 +75,17 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>src/Soul</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\Soul\;$(SolutionDir)Consoul\vendor\irrklang\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>irrklang.lib;winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Consoul\vendor\irrklang\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Soul\Audio\AudioEngine.cpp" />
     <ClCompile Include="src\Soul\File\ChartFile.cpp" />
     <ClCompile Include="src\Soul\Layers\ConsoleLayer.cpp" />
     <ClCompile Include="src\Soul\InputManager.cpp" />
@@ -96,12 +99,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Soul\UI\UIButton.cpp" />
-    <ClCompile Include="src\Soul\Utility.cpp" />
     <ClCompile Include="src\Soul\Window.cpp" />
     <ClCompile Include="src\Soul\UI\UISet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameLayer.h" />
+    <ClInclude Include="src\Soul\Audio\AudioEngine.h" />
     <ClInclude Include="src\Soul\File\ChartFile.h" />
     <ClInclude Include="src\Soul\File\SongFile.h" />
     <ClInclude Include="src\Soul\Layers\ConsoleLayer.h" />
@@ -115,7 +118,27 @@
     <ClInclude Include="src\Soul\Soul.h" />
     <ClInclude Include="src\Soul\UI\UIButton.h" />
     <ClInclude Include="src\Soul\UI\UIElement.h" />
-    <ClInclude Include="src\Soul\Utility.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ESoundEngineOptions.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ESoundOutputDrivers.h" />
+    <ClInclude Include="src\Soul\vendor\ik_EStreamModes.h" />
+    <ClInclude Include="src\Soul\vendor\ik_IAudioRecorder.h" />
+    <ClInclude Include="src\Soul\vendor\ik_IAudioStream.h" />
+    <ClInclude Include="src\Soul\vendor\ik_IAudioStreamLoader.h" />
+    <ClInclude Include="src\Soul\vendor\ik_IFileFactory.h" />
+    <ClInclude Include="src\Soul\vendor\ik_IFileReader.h" />
+    <ClInclude Include="src\Soul\vendor\ik_IRefCounted.h" />
+    <ClInclude Include="src\Soul\vendor\ik_irrKlangTypes.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ISound.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ISoundDeviceList.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ISoundEffectControl.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ISoundEngine.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ISoundMixedOutputReceiver.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ISoundSource.h" />
+    <ClInclude Include="src\Soul\vendor\ik_ISoundStopEventReceiver.h" />
+    <ClInclude Include="src\Soul\vendor\ik_IVirtualRefCounted.h" />
+    <ClInclude Include="src\Soul\vendor\ik_SAudioStreamFormat.h" />
+    <ClInclude Include="src\Soul\vendor\ik_vec3d.h" />
+    <ClInclude Include="src\Soul\vendor\irrKlang.h" />
     <ClInclude Include="src\Soul\Window.h" />
     <ClInclude Include="src\Soul\UI\UISet.h" />
   </ItemGroup>

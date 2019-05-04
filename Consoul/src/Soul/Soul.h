@@ -2,6 +2,7 @@
 
 // This file should only be included in Client files
 
+#include "Audio/AudioEngine.h"
 #include "Application.h"
 #include "File/ChartFile.h"
 #include "Layers/ConsoleLayer.h"

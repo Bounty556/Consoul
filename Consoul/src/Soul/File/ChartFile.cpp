@@ -4,7 +4,6 @@
 #include <fstream>
 
 #include "Log.h"
-#include "Utility.h"
 
 namespace Soul {
 	ChartFile::ChartFile(const std::string& filePath)
@@ -43,7 +42,7 @@ namespace Soul {
 				}
 				else if (inNoteSection)
 				{
-					if (StartsWith(line.c_str(), "}"))
+					if (line.find("}") != std::string::npos)
 					{
 						Log::LogInfo("Loaded " + std::to_string(m_Notes.size()) + " notes");
 						return;
@@ -52,13 +51,13 @@ namespace Soul {
 					// Get Note data in file
 					LoadNoteData(line.c_str());
 				}
-				else if (StartsWith(line.c_str(), "[Song]"))
+				else if (line.find("[Song]") != std::string::npos)
 				{
 					// Start section
 					std::getline(file, line, '\n');
 					inSongSection = true;
 				}
-				else if (StartsWith(line.c_str(), "[ExpertSingle]"))
+				else if (line.find("ExpertSingle") != std::string::npos)
 				{
 					// Notes section
 					std::getline(file, line, '\n');

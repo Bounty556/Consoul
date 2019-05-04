@@ -51,7 +51,7 @@
     <ClCompile Include="src\Soul\File\ChartFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Soul\Utility.cpp">
+    <ClCompile Include="src\Soul\Audio\AudioEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,10 +101,73 @@
     <ClInclude Include="src\Soul\File\ChartFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Soul\Utility.h">
+    <ClInclude Include="src\GameLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameLayer.h">
+    <ClInclude Include="src\Soul\Audio\AudioEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ESoundEngineOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ESoundOutputDrivers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_EStreamModes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_IAudioRecorder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_IAudioStream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_IAudioStreamLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_IFileFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_IFileReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_IRefCounted.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_irrKlangTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ISound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ISoundDeviceList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ISoundEffectControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ISoundEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ISoundMixedOutputReceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ISoundSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_ISoundStopEventReceiver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_IVirtualRefCounted.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_SAudioStreamFormat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\ik_vec3d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Soul\vendor\irrKlang.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

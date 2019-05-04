@@ -64,11 +64,12 @@ public:
 		: Layer(160, 45),
 		m_Highway(new char[160 * 45]),
 		m_BottomTimeStamp(0), m_TopTimeStamp(0),
-		m_HighwayCompression(3.0f),
+		m_HighwayCompression(1.25f),
 		m_TimeSinceStart(0),
 		m_Chart(chart)
 	{
 		LoadHighway();
+		Soul::AudioEngine::Play("Song.ogg");
 	}
 
 	~GameLayer()
@@ -81,8 +82,8 @@ public:
 	{
 		m_TimeSinceStart += deltaTime;
 
-		m_BottomTimeStamp = (int)(m_TimeSinceStart * m_Chart->GetResolution());
-		m_TopTimeStamp = (int)((m_TimeSinceStart + m_HighwayCompression) * m_Chart->GetResolution());
+		m_BottomTimeStamp = (int)(m_TimeSinceStart * (m_Chart->GetResolution() * 2.1f));
+		m_TopTimeStamp = (int)((m_TimeSinceStart + m_HighwayCompression) * (m_Chart->GetResolution() * 2.1f));
 
 		while (m_Chart->HasNextNote() && m_Chart->PeekNextNote().TimeStamp <= m_TopTimeStamp)
 			m_Notes.push_front(Note(m_Chart->GetNextNote()));

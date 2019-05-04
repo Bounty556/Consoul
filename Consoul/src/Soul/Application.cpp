@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Application.h"
 #include "InputManager.h"
+#include "Audio/AudioEngine.h"
 
 namespace Soul {
 	Application::Application()
@@ -33,6 +34,8 @@ namespace Soul {
 			m_LayerStack.Draw(m_Window.get());
 			m_Window->DrawFrame();
 		}
+
+		AudioEngine::CleanUp();
 	}
 	void Application::PushLayer(Layer* layer)
 	{
