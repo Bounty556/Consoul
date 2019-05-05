@@ -68,7 +68,7 @@ class Client : public Soul::Application
 public:
 	Client()
 	{
-		PushLayer(new GameLayer(new Soul::ChartFile("Songs/Trading Shadows/notes")));
+		PushLayer(new GameLayer(new Soul::ChartFile("Songs/Soria Moria/notes")));
 		PushOverlay(new Soul::ConsoleLayer(160, 6));
 	}
 

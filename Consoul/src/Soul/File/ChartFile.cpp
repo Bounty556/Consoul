@@ -167,12 +167,11 @@ namespace Soul {
 		else
 			note.Sustain = true;
 
-		// For preventing 2 notes from appearing one the same line.... Turns out that's exactly
-		// what we want
-		//if (m_Notes.size() > 0 && m_Notes.back().TimeStamp == note.TimeStamp)
-		//	m_Notes.back().Color = (NoteColor)(m_Notes.back().Color | note.Color);
-		//else
-		m_Notes.push(note);
+		// For combining 2 notes on the same line into the same note
+		if (m_Notes.size() > 0 && m_Notes.back().TimeStamp == note.TimeStamp)
+			m_Notes.back().Color = (NoteColor)(m_Notes.back().Color | note.Color);
+		else
+			m_Notes.push(note);
 	}
 
 	void ChartFile::LoadSyncData(const std::string& line)

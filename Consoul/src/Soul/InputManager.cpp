@@ -61,4 +61,15 @@ namespace Soul {
 				
 		}
 	}
+
+	short InputManager::GetKeysDown()
+	{
+		short keysDown = 0;
+
+		for (auto it = m_KeyState.begin(); it != m_KeyState.end(); ++it)
+			if (it->second & State::Down)
+				keysDown += it->first;
+		
+		return keysDown;
+	}
 }

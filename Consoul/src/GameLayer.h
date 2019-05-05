@@ -6,58 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-class Note
-{
-public:
-	Note() = delete;
-
-	Note(Soul::ChartFile::NoteData data)
-		: note(data)
-	{
-		m_StartYPos = m_YPos = 11;
-		m_FinalYPos = 44;
-
-		switch (data.Color)
-		{
-		case Soul::ChartFile::Green:
-			m_StartXPos = m_XPos = 67;
-			m_FinalXPos = 45;
-			break;
-		case Soul::ChartFile::Red:
-			m_StartXPos = m_XPos = 73;
-			m_FinalXPos = 62;
-			break;
-		case Soul::ChartFile::Yellow:
-			m_StartXPos = m_XPos = m_FinalXPos = 79;
-			break;
-		case Soul::ChartFile::Blue:
-			m_StartXPos = m_XPos = 85;
-			m_FinalXPos = 96;
-			break;
-		case Soul::ChartFile::Orange:
-			m_StartXPos = m_XPos = 91;
-			m_FinalXPos = 113;
-			break;
-		}
-	}
-
-	void Update(int bottomTimeStamp, int topTimeStamp, int hitLineHeight)
-	{
-		// Interpolate position between start and end x's and y's
-		float percentDone = ((float)(topTimeStamp - note.TimeStamp) / (float)(topTimeStamp - bottomTimeStamp))
-			- ((float)hitLineHeight / 33.0f);
-
-		m_XPos = percentDone * (float)(m_FinalXPos - m_StartXPos) + m_StartXPos;
-		m_YPos = percentDone * (float)(m_FinalYPos - m_StartYPos) + m_StartYPos;
-	}
-
-	inline const Soul::ChartFile::NoteData GetData() const { return note; }
-	inline const int GetXPos() const { return (int)m_XPos; }
-	inline const int GetYPos() const { return (int)m_YPos; }
-private:
-	float m_StartXPos, m_StartYPos, m_XPos, m_YPos, m_FinalXPos, m_FinalYPos;
-	Soul::ChartFile::NoteData note;
-};
+#include "Notes.h"
 
 class GameLayer : public Soul::Layer
 {
@@ -66,15 +15,12 @@ public:
 		: Layer(160, 45),
 		m_Highway(new char[160 * 45]),
 		m_BottomTimeStamp(0), m_TopTimeStamp(0),
-		m_HitLineHeight(6),
-		m_Score(0),
-		m_ComboCount(0),
-		m_Multiplier(1),
+		m_HitLineHeight(7),
+		m_Score(0), m_ComboCount(0), m_Multiplier(1),
 		m_HighwayCompression(1.25f),
 		m_BPM(120.0f),
 		m_TimeSinceStart(0),
-		m_CurrentDistance(0.0),
-		m_PreviousDistance(0.0),
+		m_CurrentDistance(0.0), m_PreviousDistance(0.0),
 		m_Chart(chart)
 	{
 		Soul::InputManager::AddKey(Soul::A);
@@ -82,9 +28,11 @@ public:
 		Soul::InputManager::AddKey(Soul::D);
 		Soul::InputManager::AddKey(Soul::F);
 		Soul::InputManager::AddKey(Soul::Space);
+		Soul::InputManager::AddKey(Soul::Up);
+		Soul::InputManager::AddKey(Soul::Left);
 
 		LoadHighway();
-		Soul::AudioEngine::Play("Songs/Trading Shadows/song.ogg");
+		Soul::AudioEngine::Play("Songs/Soria Moria/song.ogg");
 	}
 
 	~GameLayer()
@@ -95,6 +43,7 @@ public:
 
 	bool Update(double deltaTime) override
 	{
+		// Update to check for strumming
 		CheckNoteHits();
 
 		m_TimeSinceStart += deltaTime;
@@ -106,7 +55,7 @@ public:
 		m_TopTimeStamp = (int)((m_TimeSinceStart + m_HighwayCompression) * ((float)m_Chart->GetResolution() * bps) + m_PreviousDistance);
 
 		while (m_Chart->HasNextNote() && m_Chart->PeekNextNote().TimeStamp <= m_TopTimeStamp)
-			m_Notes.push_front(Note(m_Chart->GetNextNote()));
+			m_Notes.push_front(Group(m_Chart->GetNextNote()));
 
 		while (m_Chart->HasNextEvent() && m_Chart->PeekNextEvent().TimeStamp <= m_BottomTimeStamp)
 		{
@@ -138,11 +87,12 @@ public:
 			m_Draw[i] = m_Highway[i];
 
 		// Draw Notes
-		for (auto it = m_Notes.begin(); it != m_Notes.end(); ++it)
+		for (const Group& group : m_Notes)
 		{
-			Note note = *it;
-			if (note.GetYPos() >= 11 && note.GetYPos() <= 44)
-				m_Draw[note.GetYPos() * 160 + note.GetXPos()] = '#';
+			int yPos = group.GetYPos();
+			if (yPos >= 11 && yPos <= 44)
+				for (const Note note : group.GetNotes())
+					m_Draw[yPos * 160 + (int)(note.GetXPos())] = '#';
 		}
 
 		//Draw Combo Bar
@@ -193,103 +143,70 @@ private:
 
 	void CheckNoteHits()
 	{
-		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::A))
+		if (!m_Notes.empty() &&
+			(Soul::InputManager::WasKeyPressed(Soul::Up) || Soul::InputManager::WasKeyPressed(Soul::Left)))
 		{
 			bool hit = false;
 			for (auto it = m_Notes.end(); it != m_Notes.begin();)
 			{
 				it--;
 
-				// Note hit
-				if (it->GetData().Color == Soul::ChartFile::Green &&
-					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
+				int noteDistance = (45 - m_HitLineHeight) - it->GetYPos();
+				if (noteDistance <= 3 && noteDistance >= -2)
 				{
-					m_Notes.erase(it);
-					hit = true;
-					break;
+					short keysDown = 0;
+					for (const Note note : it->GetNotes())
+						keysDown += note.GetAssociatedKey();
+
+					short actualKeysDown = Soul::InputManager::GetKeysDown();
+
+					// We don't want to count pressing Enter or Pipe as note selection
+					if (Soul::InputManager::IsKeyDown(Soul::Up))
+						actualKeysDown -= Soul::Up;
+					if (Soul::InputManager::IsKeyDown(Soul::Left))
+						actualKeysDown -= Soul::Left;
+
+					// Don't prevent a hit if this is a single note and the notes to the left of it are pressed
+					if (it->GetNotes().size() == 1)
+					{
+						// Remove all notes to the left of this one if applicable
+						if (Soul::InputManager::IsKeyDown((Soul::Keys)keysDown))
+						{
+							switch (keysDown)
+							{
+							case Soul::Space:
+								actualKeysDown = Soul::Space;
+								break;
+							case Soul::F:
+								if (!Soul::InputManager::IsKeyDown(Soul::Space))
+									actualKeysDown = Soul::F;
+								break;
+							case Soul::D:
+								if (!Soul::InputManager::IsKeyDown(Soul::Space) &&
+									!Soul::InputManager::IsKeyDown(Soul::F))
+									actualKeysDown = Soul::D;
+								break;
+							case Soul::S:
+								if (!Soul::InputManager::IsKeyDown(Soul::Space) &&
+									!Soul::InputManager::IsKeyDown(Soul::F) &&
+									!Soul::InputManager::IsKeyDown(Soul::D))
+									actualKeysDown = Soul::S;
+								break;
+							}
+						}
+					}
+
+					// Note was hit
+					if (keysDown == actualKeysDown)
+					{
+						m_Notes.erase(it);
+						hit = true;
+
+						break;
+					}
 				}
-			}
-
-			if (hit)
-				NoteHit();
-			else
-				NoteMissed();
-		}
-		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::S))
-		{
-			bool hit = false;
-			for (auto it = m_Notes.end(); it != m_Notes.begin();)
-			{
-				it--;
-
-				if (it->GetData().Color == Soul::ChartFile::Red &&
-					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
+				else if (noteDistance > 3)
 				{
-					m_Notes.erase(it);
-					hit = true;
-					break;
-				}
-			}
-
-			if (hit)
-				NoteHit();
-			else
-				NoteMissed();
-		}
-		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::D))
-		{
-			bool hit = false;
-			for (auto it = m_Notes.end(); it != m_Notes.begin();)
-			{
-				it--;
-
-				if (it->GetData().Color == Soul::ChartFile::Yellow &&
-					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
-				{
-					m_Notes.erase(it);
-					hit = true;
-					break;
-				}
-			}
-
-			if (hit)
-				NoteHit();
-			else
-				NoteMissed();
-		}
-		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::F))
-		{
-			bool hit = false;
-			for (auto it = m_Notes.end(); it != m_Notes.begin();)
-			{
-				it--;
-
-				if (it->GetData().Color == Soul::ChartFile::Blue &&
-					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
-				{
-					m_Notes.erase(it);
-					hit = true;
-					break;
-				}
-			}
-
-			if (hit)
-				NoteHit();
-			else
-				NoteMissed();
-		}
-		if (!m_Notes.empty() && Soul::InputManager::WasKeyPressed(Soul::Space))
-		{
-			bool hit = false;
-			for (auto it = m_Notes.end(); it != m_Notes.begin();)
-			{
-				it--;
-
-				if (it->GetData().Color == Soul::ChartFile::Orange &&
-					std::abs(it->GetYPos() - (45 - m_HitLineHeight)) <= 3)
-				{
-					m_Notes.erase(it);
-					hit = true;
 					break;
 				}
 			}
@@ -341,6 +258,6 @@ private:
 	double m_TimeSinceStart;
 	double m_CurrentDistance;
 	double m_PreviousDistance;
-	std::deque<Note> m_Notes;
+	std::deque<Group> m_Notes;
 	Soul::ChartFile* m_Chart;
 };

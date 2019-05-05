@@ -135,6 +135,7 @@ namespace Soul {
 		static bool WasKeyPressed(Keys key);
 		static bool WasKeyReleased(Keys key);
 		static void UpdateStates();
+		static short GetKeysDown();
 	private:
 		static std::map<Keys, unsigned char> m_KeyState;
 	};
