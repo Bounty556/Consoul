@@ -8,6 +8,8 @@ class Note
 public:
 	Note(Soul::ChartFile::NoteColor color)
 	{
+		m_Color = color;
+
 		switch (color)
 		{
 		case Soul::ChartFile::Green:
@@ -44,7 +46,9 @@ public:
 
 	inline const int GetXPos() const { return (int)m_XPos; }
 	inline const Soul::Keys GetAssociatedKey() const { return m_AssociatedKey; }
+	inline const Soul::ChartFile::NoteColor GetColor() const { return m_Color; }
 private:
+	Soul::ChartFile::NoteColor m_Color;
 	float m_StartXPos, m_XPos, m_FinalXPos;
 	Soul::Keys m_AssociatedKey;
 };
@@ -54,8 +58,9 @@ class Group
 {
 public:
 	Group(Soul::ChartFile::NoteData data)
-		: m_Data(data),
-		m_StartYPos(11), m_YPos(11), m_FinalYPos(44)
+		: m_Hopo(false),
+		m_StartYPos(11), m_YPos(11), m_FinalYPos(44),
+		m_Data(data)
 	{
 		if (data.Color & Soul::ChartFile::Green)
 			m_Notes.emplace_back(Note(Soul::ChartFile::Green));
@@ -81,9 +86,36 @@ public:
 			note.Update(percentDone);
 	}
 
+	void SetHopo() { m_Hopo = true; }
+	void SetMarked() { m_Marked = true; }
+
+	inline const bool IsHopo() const { return m_Hopo; }
+	inline const bool IsMarked() const { return m_Marked; }
 	inline const std::vector<Note>& GetNotes() const { return m_Notes; };
+	inline const int GetTimeStamp() const { return m_Data.TimeStamp; }
 	inline const int GetYPos() const { return (int)m_YPos; }
+	bool operator==(const Group& rhs)
+	{
+		if (rhs.GetNotes().size() == m_Notes.size())
+		{
+			for (const Note& note : m_Notes)
+			{
+				auto found = std::find_if(rhs.GetNotes().begin(), rhs.GetNotes().end(),
+					[&note](const Note& other) { return note.GetColor() == other.GetColor();  });
+
+				if (found == rhs.GetNotes().end())
+					return false;
+			}
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 private:
+	bool m_Hopo, m_Marked;
 	float m_StartYPos, m_YPos, m_FinalYPos;
 	Soul::ChartFile::NoteData m_Data;
 	std::vector<Note> m_Notes;

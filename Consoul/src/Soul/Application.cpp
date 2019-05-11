@@ -19,6 +19,10 @@ namespace Soul {
 		std::chrono::steady_clock::time_point currentFrame;
 		std::chrono::duration<double> elapsedTime;
 		double deltaTime;
+		int modifier = 1;
+
+		InputManager::AddKey(One);
+		InputManager::AddKey(Two);
 
 		while (m_Running)
 		{
@@ -28,7 +32,19 @@ namespace Soul {
 
 			deltaTime = elapsedTime.count();
 
-			m_LayerStack.Update(deltaTime);
+			if (InputManager::WasKeyPressed(One))
+			{
+				if (--modifier < 1)
+					modifier = 1;
+
+				AudioEngine::SetSpeed(modifier);
+			}
+			else if (InputManager::WasKeyPressed(Two))
+			{
+				AudioEngine::SetSpeed(++modifier);
+			}
+
+			m_LayerStack.Update(deltaTime / modifier);
 			InputManager::UpdateStates();
 			m_Window->ClearFrame();
 			m_LayerStack.Draw(m_Window.get());

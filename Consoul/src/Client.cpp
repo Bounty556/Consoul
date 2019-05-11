@@ -2,13 +2,12 @@
 #include "Soul/Soul.h"
 #include "GameLayer.h"
 
-///TODO: MAKE GAME LAYER
-///TODO:	ADD SUSTAIN NOTES
 ///TODO: ADD MAIN MENU
 ///TODO: ADD SONG PICKER MENU
 ///TODO: ADD GAME OVER STATE (SONG IS DONE)
 ///TODO: SAVE SCORES
 ///TODO: RATE SCORES
+///TODO: ADD SUSTAIN NOTES
 
 class ExampleUILayer : public Soul::Layer
 {

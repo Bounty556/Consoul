@@ -3,10 +3,17 @@
 
 namespace Soul {
 	std::map<Keys, unsigned char> InputManager::m_KeyState;
+	bool InputManager::m_InputDetected;
+	std::vector<Keys> InputManager::m_TrackedKeys;
 
 	void InputManager::AddKey(Keys key)
 	{
 		m_KeyState.insert(std::pair<Keys, unsigned char>(key, State::None));
+	}
+
+	void InputManager::AddTrackedKey(Keys key)
+	{
+		m_TrackedKeys.push_back(key);
 	}
 
 	bool InputManager::IsKeyDown(Keys key)
@@ -39,10 +46,18 @@ namespace Soul {
 		return found->second & State::Released;
 	}
 
+	bool InputManager::IsInputChangeDetected()
+	{
+		return m_InputDetected;
+	}
+
 	void InputManager::UpdateStates()
 	{
+		m_InputDetected = false;
 		for (auto it = m_KeyState.begin(); it != m_KeyState.end(); ++it)
 		{
+			State notePrev = (State)(it->second);
+
 			if (GetAsyncKeyState(it->first))
 			{
 				if (it->second == State::None)
@@ -58,7 +73,10 @@ namespace Soul {
 				else
 					it->second = State::None;
 			}
-				
+			
+			if (!m_InputDetected && notePrev != it->second
+				&& std::find(m_TrackedKeys.begin(), m_TrackedKeys.end(), it->first) != m_TrackedKeys.end())
+				m_InputDetected = true;
 		}
 	}
 
