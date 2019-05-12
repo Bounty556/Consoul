@@ -44,22 +44,17 @@ namespace Soul {
 				AudioEngine::SetSpeed(++modifier);
 			}
 
-			m_LayerStack.Update(deltaTime / modifier);
+			LayerStack::Update(deltaTime / modifier);
 			InputManager::UpdateStates();
 			m_Window->ClearFrame();
-			m_LayerStack.Draw(m_Window.get());
+			LayerStack::Draw(m_Window.get());
 			m_Window->DrawFrame();
+
+			if (LayerStack::AllEmpty())
+				m_Running = false;
 		}
 
+		LayerStack::CleanUp();
 		AudioEngine::CleanUp();
-	}
-	void Application::PushLayer(Layer* layer)
-	{
-		m_LayerStack.QueueAction(LayerStack::Action::QueuePushLayer, layer);
-	}
-
-	void Application::PushOverlay(Layer* overlay)
-	{
-		m_LayerStack.QueueAction(LayerStack::Action::QueuePushOverlay, overlay);
 	}
 }

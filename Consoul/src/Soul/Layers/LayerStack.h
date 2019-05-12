@@ -12,24 +12,52 @@ namespace Soul {
 			QueuePushLayer,
 			QueuePushOverlay,
 			QueuePopLayer,
-			QueuePopOverlay
+			QueuePopOverlay,
+			QueueFullClear
 		};
 	public:
-		LayerStack();
-		~LayerStack();
+		LayerStack() = delete;
 
-		void QueueAction(Action action, Layer* layer);
+		/*
+		Adds a new action to the queue, along with the associated layer the action should act upon.
 
-		void Update(double deltaTime);
-		void Draw(const Window* target);
+		Action action: Action to queue
+		Layer* layer: Layer to be acted on
+		*/
+		static void QueueAction(Action action, Layer* layer);
+
+		/*
+		Clears the queue by calling every action in it.
+		Sends an update call to all the layers in the stack.
+
+		double deltaTime: The length of the previous frame in seconds
+		*/
+		static void Update(double deltaTime);
+
+		/*
+		Gets all char* representations of each layer and draws them to the given window
+
+		const Window* target: The window to draw to
+		*/
+		static void Draw(const Window* target);
+
+		/*
+		Returns: true if there are no layers, overlays, or anything in the queue. False otherwise
+		*/
+		static bool AllEmpty();
+
+		/*
+		Cleans up allocated memory
+		*/
+		static void CleanUp();
 	private:
-		void PushLayer(Layer* layer);
-		void PopLayer(Layer* layer);
-		void PushOverlay(Layer* overlay);
-		void PopOverlay(Layer* overlay);
+		static void PushLayer(Layer* layer);
+		static void PopLayer(Layer* layer);
+		static void PushOverlay(Layer* overlay);
+		static void PopOverlay(Layer* overlay);
 	private:
-		std::vector<Layer*> m_Layers;
-		std::vector<Layer*> m_Overlays;
-		std::vector<std::pair<Action, Layer*>> m_Queue;
+		static std::vector<Layer*> m_Layers;
+		static std::vector<Layer*> m_Overlays;
+		static std::vector<std::pair<Action, Layer*>> m_Queue;
 	};
 }

@@ -2,11 +2,21 @@
 #include "LayerStack.h"
 
 namespace Soul {
-	LayerStack::LayerStack()
+	std::vector<Layer*> LayerStack::m_Layers;
+	std::vector<Layer*> LayerStack::m_Overlays;
+	std::vector<std::pair<LayerStack::Action, Layer*>> LayerStack::m_Queue;
+
+	void LayerStack::QueueAction(Action action, Layer* layer)
 	{
+		m_Queue.push_back(std::pair<Action, Layer*>(action, layer));
 	}
 
-	LayerStack::~LayerStack()
+	bool LayerStack::AllEmpty()
+	{
+		return m_Layers.empty() && m_Overlays.empty() && m_Queue.empty();
+	}
+
+	void LayerStack::CleanUp()
 	{
 		for (Layer* layer : m_Layers)
 			delete layer;
@@ -16,11 +26,6 @@ namespace Soul {
 
 		m_Layers.clear();
 		m_Overlays.clear();
-	}
-
-	void LayerStack::QueueAction(Action action, Layer* layer)
-	{
-		m_Queue.push_back(std::pair<Action, Layer*>(action, layer));
 	}
 
 	void LayerStack::PushLayer(Layer* layer)
@@ -66,6 +71,9 @@ namespace Soul {
 				break;
 			case Action::QueuePopOverlay:
 				PopOverlay((*it).second);
+				break;
+			case Action::QueueFullClear:
+				CleanUp();
 				break;
 			}
 		}

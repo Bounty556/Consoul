@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameLayer.h" />
+    <ClInclude Include="src\MainMenuLayer.h" />
     <ClInclude Include="src\Notes.h" />
     <ClInclude Include="src\Soul\Audio\AudioEngine.h" />
     <ClInclude Include="src\Soul\File\ChartFile.h" />
