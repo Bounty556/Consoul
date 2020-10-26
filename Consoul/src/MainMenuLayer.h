@@ -17,7 +17,7 @@ public:
 		{
 			Soul::LayerStack::QueueAction(Soul::LayerStack::QueuePopLayer, this);
 			Soul::LayerStack::QueueAction(Soul::LayerStack::QueuePushLayer,
-				new GameLayer(new Soul::ChartFile("Songs/Soria Moria/notes")));
+				new GameLayer(new Soul::ChartFile("Songs/Lira/notes")));
 		});
 
 		Soul::UIButton* quitButton = new Soul::UIButton("Quit Game", 74, 17, [this]()

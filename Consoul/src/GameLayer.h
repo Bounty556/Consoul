@@ -41,7 +41,7 @@ public:
 		Soul::InputManager::AddTrackedKey(Soul::Space);
 
 		LoadHighway();
-		Soul::AudioEngine::Play("Songs/Soria Moria/song.ogg");
+		Soul::AudioEngine::Play("Songs/Lira/song.ogg");
 	}
 
 	~GameLayer()
