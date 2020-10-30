@@ -122,9 +122,9 @@ namespace Soul {
 		enum State : unsigned char
 		{
 			None = 0,
-			Released = 1,
-			Pressed = 2,
-			Down = 4
+			Released = 1 << 0,
+			Pressed = 1 << 1,
+			Down = 1 << 2
 		};
 
 		InputManager() = delete;
