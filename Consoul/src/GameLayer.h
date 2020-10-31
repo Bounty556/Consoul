@@ -26,6 +26,7 @@ public:
 	{
 		m_HopoThreshold = m_Chart->GetResolution() / 4;
 
+		// All keys that the game uses
 		Soul::InputManager::AddKey(Soul::A);
 		Soul::InputManager::AddKey(Soul::S);
 		Soul::InputManager::AddKey(Soul::D);
@@ -34,11 +35,12 @@ public:
 		Soul::InputManager::AddKey(Soul::Up);
 		Soul::InputManager::AddKey(Soul::Left);
 
-		Soul::InputManager::AddTrackedKey(Soul::A);
-		Soul::InputManager::AddTrackedKey(Soul::S);
-		Soul::InputManager::AddTrackedKey(Soul::D);
-		Soul::InputManager::AddTrackedKey(Soul::F);
-		Soul::InputManager::AddTrackedKey(Soul::Space);
+		// These are our note keys
+		Soul::InputManager::AddNoteKey(Soul::A);
+		Soul::InputManager::AddNoteKey(Soul::S);
+		Soul::InputManager::AddNoteKey(Soul::D);
+		Soul::InputManager::AddNoteKey(Soul::F);
+		Soul::InputManager::AddNoteKey(Soul::Space);
 
 		LoadHighway();
 		Soul::AudioEngine::Play("Songs/Lira/song.ogg");

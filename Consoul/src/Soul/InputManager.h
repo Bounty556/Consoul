@@ -130,17 +130,19 @@ namespace Soul {
 		InputManager() = delete;
 		~InputManager() = delete;
 	public:
+		// Keys that 
 		static void AddKey(Keys key);
-		static void AddTrackedKey(Keys key);
+		static void AddNoteKey(Keys key);
 		static bool IsKeyDown(Keys key);
 		static bool WasKeyPressed(Keys key);
 		static bool WasKeyReleased(Keys key);
 		static bool IsInputChangeDetected();
 		static void UpdateStates();
 		static short GetKeysDown();
+
 	private:
-		static std::map<Keys, unsigned char> m_KeyState;
-		static std::vector<Keys> m_TrackedKeys;
+		static std::map<Keys, State> m_KeyStates; // All keys used
+		static std::vector<Keys> m_NoteKeys; // All note Keys
 		static bool m_InputDetected;
 	};
 }

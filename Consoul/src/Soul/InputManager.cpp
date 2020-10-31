@@ -2,25 +2,25 @@
 #include "InputManager.h"
 
 namespace Soul {
-	std::map<Keys, unsigned char> InputManager::m_KeyState;
+	std::map<Keys, InputManager::State> InputManager::m_KeyStates;
 	bool InputManager::m_InputDetected;
-	std::vector<Keys> InputManager::m_TrackedKeys;
+	std::vector<Keys> InputManager::m_NoteKeys;
 
 	void InputManager::AddKey(Keys key)
 	{
-		m_KeyState.insert(std::pair<Keys, unsigned char>(key, State::None));
+		m_KeyStates.insert(std::pair<Keys, InputManager::State>(key, State::None));
 	}
 
-	void InputManager::AddTrackedKey(Keys key)
+	void InputManager::AddNoteKey(Keys key)
 	{
-		m_TrackedKeys.push_back(key);
+		m_NoteKeys.push_back(key);
 	}
 
 	bool InputManager::IsKeyDown(Keys key)
 	{
-		auto found = m_KeyState.find(key);
+		auto found = m_KeyStates.find(key);
 
-		if (found == m_KeyState.end())
+		if (found == m_KeyStates.end())
 			return false;
 
 		return found->second & State::Down;
@@ -28,9 +28,9 @@ namespace Soul {
 
 	bool InputManager::WasKeyPressed(Keys key)
 	{
-		auto found = m_KeyState.find(key);
+		auto found = m_KeyStates.find(key);
 
-		if (found == m_KeyState.end())
+		if (found == m_KeyStates.end())
 			return false;
 
 		return found->second & State::Pressed;
@@ -38,9 +38,9 @@ namespace Soul {
 
 	bool InputManager::WasKeyReleased(Keys key)
 	{
-		auto found = m_KeyState.find(key);
+		auto found = m_KeyStates.find(key);
 
-		if (found == m_KeyState.end())
+		if (found == m_KeyStates.end())
 			return false;
 
 		return found->second & State::Released;
@@ -54,29 +54,46 @@ namespace Soul {
 	void InputManager::UpdateStates()
 	{
 		m_InputDetected = false;
-		for (auto it = m_KeyState.begin(); it != m_KeyState.end(); ++it)
+		// Loop through all keys registered and mark whether
+		for (auto it = m_KeyStates.begin(); it != m_KeyStates.end(); ++it)
 		{
-			State notePrev = (State)(it->second);
+			// The state the note was in before we changed it
+			State lastNoteState = (State)(it->second);
 
+			// Is the key down
 			if (GetAsyncKeyState(it->first))
 			{
+				// If the key was not pressed
 				if (it->second == State::None)
-					it->second = State::Down | State::Pressed;
+				{
+					// Mark it as down and just pressed
+					it->second = (InputManager::State)(State::Down | State::Pressed);
+				}
 				else
+				{
+					// Otherwise just mark it as down
 					it->second = State::Down;
+				}
 			}
 			else
 			{
 				// Set as State::Released for the first frame, then none for the rest
 				if (it->second & State::Down)
+				{
 					it->second = State::Released;
+				}
 				else
+				{
 					it->second = State::None;
+				}
 			}
 			
-			if (!m_InputDetected && notePrev != it->second
-				&& std::find(m_TrackedKeys.begin(), m_TrackedKeys.end(), it->first) != m_TrackedKeys.end())
+			// If we have a note that was pressed, mark input as detected
+			if (lastNoteState != it->second
+				&& std::find(m_NoteKeys.begin(), m_NoteKeys.end(), it->first) != m_NoteKeys.end())
+			{
 				m_InputDetected = true;
+			}
 		}
 	}
 
@@ -84,7 +101,7 @@ namespace Soul {
 	{
 		short keysDown = 0;
 
-		for (auto it = m_KeyState.begin(); it != m_KeyState.end(); ++it)
+		for (auto it = m_KeyStates.begin(); it != m_KeyStates.end(); ++it)
 			if (it->second & State::Down)
 				keysDown += it->first;
 		
